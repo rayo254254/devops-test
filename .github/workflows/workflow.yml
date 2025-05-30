@@ -16,7 +16,7 @@ jobs:
           root: ./
           css: true
 
-            delivery:
+        delivery:
     runs-on: ubuntu-latest
     needs: test
     steps:
