@@ -9,3 +9,5 @@ else:
 
 tests = "running"
 running = "running"
+ryan = "ryan"
+print(f"Tests status: {tests}")
