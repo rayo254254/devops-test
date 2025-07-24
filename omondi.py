@@ -1,0 +1,1 @@
+print("This is the main module of omondi.py")
