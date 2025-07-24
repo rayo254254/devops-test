@@ -1,11 +1,10 @@
-# omondi.py
 from flask import Flask
 
 app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    return "Hello from Omondi's app on Cloud Run!"
+    return "Hello from Omondi's Cloud Run app!"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
