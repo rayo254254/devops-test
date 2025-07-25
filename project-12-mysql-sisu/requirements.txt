@@ -1,0 +1,5 @@
+# Core dependencies
+Flask==2.3.3
+functions-framework==3.5.0
+pymysql==1.1.0
+requests==2.31.0
