@@ -1,8 +1,11 @@
 # main.py test 2
-
+from main import app
 import os
 import requests
 from flask import (Flask, render_template, request, redirect, url_for, flash)
+
+
+
 
 # --- Configuration ---
 # Initialize the Flask App
