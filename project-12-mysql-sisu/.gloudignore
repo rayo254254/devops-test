@@ -1,0 +1,11 @@
+# .gcloudignore
+.gcloudignore
+.git
+.gitignore
+
+# Python virtual environment
+venv/
+
+# Pycache files
+__pycache__/
+*.pyc
