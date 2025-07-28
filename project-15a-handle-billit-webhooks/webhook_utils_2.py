@@ -3,7 +3,7 @@ import urllib.parse
 import json
 
 
-#*
+#***
 def send_push_notification(message):
     url = "https://www.pushsafer.com/api?k=AYIor8gFjJ5zb1k0Y7Pv&d=17595&m=ryan_test"
     response = requests.get(url)
