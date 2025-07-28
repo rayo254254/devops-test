@@ -1,2 +1,2 @@
-.service_account.json
-.token.json
+.env
+*.json
