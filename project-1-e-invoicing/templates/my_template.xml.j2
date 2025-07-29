@@ -1,0 +1,26 @@
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+         xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+         xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+  <cbc:ID>{{ invoice.id }}</cbc:ID>
+  <cbc:IssueDate>{{ invoice.issue_date }}</cbc:IssueDate>
+  <cac:AccountingCustomerParty>
+    <cac:Party>
+      <cbc:Name>{{ invoice.customer_name }}</cbc:Name>
+    </cac:Party>
+  </cac:AccountingCustomerParty>
+
+  {% for item in invoice.invoice_lines %}
+  <cac:InvoiceLine>
+    <cbc:ID>{{ loop.index }}</cbc:ID>
+    <cbc:InvoicedQuantity>{{ item.quantity }}</cbc:InvoicedQuantity>
+
+    <cac:Price>
+      <cbc:PriceAmount currencyID="EUR">{{ item.unit_price }}</cbc:PriceAmount>
+    </cac:Price>
+  </cac:InvoiceLine>
+  {% endfor %}
+
+  <cac:LegalMonetaryTotal>
+    <cbc:PayableAmount currencyID="EUR">{{ invoice.total }}</cbc:PayableAmount>
+  </cac:LegalMonetaryTotal>
+</Invoice>

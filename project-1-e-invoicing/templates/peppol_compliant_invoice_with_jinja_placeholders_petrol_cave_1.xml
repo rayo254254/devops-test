@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- template for petrol cave proforma invoices -->
+<!-- Creation date: 2025-06-16                  -->
+<!-- By Marc De Krock                           -->
+<!-- Wiseworks bv                               -->
+<StandardBusinessDocument xmlns="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader">
+    <StandardBusinessDocumentHeader>
+        <HeaderVersion>1.0</HeaderVersion>
+        <Sender>
+            <Identifier Authority="iso6523-actorid-upis">{{ trial_participant_id }}</Identifier>
+        </Sender>
+        <Receiver>
+            <Identifier Authority="iso6523-actorid-upis">{{ trial_participant_id }}</Identifier>
+        </Receiver>
+        <DocumentIdentification>
+            <Standard>urn:oasis:names:specification:ubl:schema:xsd:Invoice-2</Standard>
+            <TypeVersion>2.1</TypeVersion>
+            <InstanceIdentifier>{{ randomUUID }}</InstanceIdentifier>
+            <Type>Invoice</Type>
+            <CreationDateAndTime>{{ isoTimestamp }}</CreationDateAndTime>
+        </DocumentIdentification>
+        <BusinessScope> 
+            <Scope>
+                <Type>DOCUMENTID</Type>
+                <InstanceIdentifier>urn:oasis:names:specification:ubl:schema:xsd:{{ doc_instance_id }}##urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0::2.1</InstanceIdentifier>
+                <Identifier>busdox-docid-qns</Identifier>
+            </Scope>
+            <Scope>
+                <Type>PROCESSID</Type>
+                <InstanceIdentifier>urn:fdc:peppol.eu:2017:poacc:billing:{{ doc_process_nr }}</InstanceIdentifier>
+                <Identifier>cenbii-procid-ubl</Identifier>
+            </Scope>
+            <Scope>
+                <Type>COUNTRY_C1</Type>
+                <InstanceIdentifier>{{ invoice.P_customer_country_id }}</InstanceIdentifier>
+            </Scope>
+        </BusinessScope>
+    </StandardBusinessDocumentHeader>
+    <Invoice xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
+    <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
+    <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
+    <cbc:ID>{{ invoice.Invoice_number }}</cbc:ID>
+    <cbc:IssueDate>{{ invoice.Invoice_date }}</cbc:IssueDate>
+    <cbc:DueDate>{{ invoice.To_be_paid_before }}</cbc:DueDate>
+    <cbc:InvoiceTypeCode>{{ invoice.P_invoice_typecode }}</cbc:InvoiceTypeCode>
+    <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+    <cbc:BuyerReference>{{ invoice.PO }}</cbc:BuyerReference>
+    <!-- <cac:InvoicePeriod>
+        <cbc:StartDate>{{ invoice.Date_from }}</cbc:StartDate>
+        <cbc:EndDate>{{ invoice.Date_til }}</cbc:EndDate>
+    </cac:InvoicePeriod>-->
+    <cac:OrderReference>
+		<cbc:ID>{{ invoice.PO }}</cbc:ID>
+        <cbc:SalesOrderID>{{ invoice.Pro_forma_out_id }}</cbc:SalesOrderID>
+	</cac:OrderReference>
+    <cac:AccountingSupplierParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="0088">{{ TEST_supplier_endpoint }}</cbc:EndpointID>
+            <cac:PartyName>
+                <cbc:Name>{{ invoice.P_supplier_trade_name }}</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>{{ P_supplier_address_streetname }}</cbc:StreetName>
+                <cbc:CityName>{{ P_supplier_address_city }}</cbc:CityName>
+                <cbc:PostalZone>{{ P_supplier_address_postalzone }}</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>{{ invoice.P_supplier_country_id }}</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>{{ invoice.P_supplier_vat_nr }}</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>{{ invoice.P_supplier_legal_name }}</cbc:RegistrationName>
+                <cbc:CompanyID>{{ invoice.P_supplier_endpoint }}</cbc:CompanyID>
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>{{ invoice.P_supplier_contact_name }}</cbc:Name>
+                <cbc:Telephone>{{ invoice.P_supplier_contact_tel }}</cbc:Telephone>
+                <cbc:ElectronicMail>{{ invoice.P_supplier_contact_email }}</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingSupplierParty>
+    <cac:AccountingCustomerParty>
+        <cac:Party>
+            <cbc:EndpointID schemeID="0002">{{ TEST_customer_endpoint }}</cbc:EndpointID>
+            <cac:PartyName>
+                <cbc:Name>{{ invoice.P_customer_trade_name }}</cbc:Name>
+            </cac:PartyName>
+            <cac:PostalAddress>
+                <cbc:StreetName>{{ P_customer_address_streetname}}</cbc:StreetName>
+                <cbc:CityName>{{ P_customer_address_city }}</cbc:CityName>
+                <cbc:PostalZone>{{ P_customer_address_postalzone }}</cbc:PostalZone>
+                <cac:Country>
+                    <cbc:IdentificationCode>{{ invoice.P_customer_country_id }}</cbc:IdentificationCode>
+                </cac:Country>
+            </cac:PostalAddress>
+            <cac:PartyTaxScheme>
+                <cbc:CompanyID>{{ invoice.P_customer_vat_nr }}</cbc:CompanyID>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:PartyTaxScheme>
+            <cac:PartyLegalEntity>
+                <cbc:RegistrationName>{{ invoice.P_customer_legal_name }}</cbc:RegistrationName>
+                <cbc:CompanyID>{{ invoice.P_customer_endpoint }}</cbc:CompanyID>
+            </cac:PartyLegalEntity>
+            <cac:Contact>
+                <cbc:Name>{{ invoice.P_customer_contact_name }}</cbc:Name>
+                <cbc:Telephone>{{ invoice.P_customer_contact_tel }}</cbc:Telephone>
+                <cbc:ElectronicMail>{{ invoice.P_customer_contact_email }}</cbc:ElectronicMail>
+            </cac:Contact>
+        </cac:Party>
+    </cac:AccountingCustomerParty>
+    <cac:PaymentMeans>
+        <cbc:PaymentMeansCode name="Credit transfer">{{ paymentmeans_code }}</cbc:PaymentMeansCode>
+        <cbc:PaymentID>{{ invoice.P_payment_reference }}</cbc:PaymentID>
+        <cac:PayeeFinancialAccount>
+            <cbc:ID>{{ invoice.P_payee_financial_account_id }}</cbc:ID>
+            <cbc:Name>{{ invoice.P_supplier_legal_name }}</cbc:Name>
+            <cac:FinancialInstitutionBranch>
+                <cbc:ID>{{ invoice.P_payee_financial_account_bic }}</cbc:ID>
+            </cac:FinancialInstitutionBranch>
+        </cac:PayeeFinancialAccount>
+    </cac:PaymentMeans>
+    <cac:PaymentTerms>
+        <cbc:Note>{{ invoice.P_payment_terms_note }}</cbc:Note>
+    </cac:PaymentTerms>
+    <cac:TaxTotal>
+        <cbc:TaxAmount currencyID="EUR">{{ invoice.Total_VAT }}</cbc:TaxAmount>
+        <cac:TaxSubtotal>
+            <cbc:TaxableAmount currencyID="EUR">{{ invoice.TaxableAmount }}</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID="EUR">{{ invoice.TaxAmount }}</cbc:TaxAmount>
+            <cac:TaxCategory>
+                <cbc:ID>{{ invoice.TaxCategory_ID }}</cbc:ID>
+                <cbc:Percent>{{ invoice.TaxCategory_Percent }}</cbc:Percent>
+                <cbc:TaxExemptionReason>{{ invoice.TaxExemptionReason }}</cbc:TaxExemptionReason>
+                <cac:TaxScheme>
+                    <cbc:ID>{{ invoice.TaxScheme_ID }}</cbc:ID>
+                </cac:TaxScheme>
+            </cac:TaxCategory>
+        </cac:TaxSubtotal>
+    </cac:TaxTotal>
+    <cac:LegalMonetaryTotal>
+        <cbc:LineExtensionAmount currencyID="EUR">{{ invoice.Total_ex_VAT }}</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID="EUR">{{ invoice.Total_ex_VAT }}</cbc:TaxExclusiveAmount>
+        <cbc:TaxInclusiveAmount currencyID="EUR">{{ invoice.Total_incl_VAT }}</cbc:TaxInclusiveAmount>
+        <cbc:PayableAmount currencyID="EUR">{{ invoice.Total_incl_VAT }}</cbc:PayableAmount>
+    </cac:LegalMonetaryTotal>
+<cac:InvoiceLine>
+    <!--only one line-->
+    <cbc:ID>1</cbc:ID>
+    <cbc:Note>{{ invoice.Note }}</cbc:Note>
+    <cbc:InvoicedQuantity unitCode="{{ invoice.P_unit_code }}">{{ invoice.Quantity }}</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID= "EUR">{{ invoice.Total_ex_VAT }}</cbc:LineExtensionAmount>
+    <cac:Item>
+            <cbc:Description>{{ invoice.Invoice_line_description }}</cbc:Description>
+            <cbc:Name>{{ invoice.Invoice_line_description }}</cbc:Name>
+            <cac:ClassifiedTaxCategory>
+                <cbc:ID>{{ invoice.P_vat_category }}</cbc:ID>
+                <cbc:Percent>{{ invoice.VAT_percentage }}</cbc:Percent>
+                <cac:TaxScheme>
+                    <cbc:ID>VAT</cbc:ID>
+                </cac:TaxScheme>
+            </cac:ClassifiedTaxCategory>
+        </cac:Item>
+    <cac:Price>
+        <cbc:PriceAmount currencyID="EUR">{{ invoice.Unit_fee }}</cbc:PriceAmount>
+    </cac:Price>
+</cac:InvoiceLine>
+</Invoice>
+</StandardBusinessDocument>

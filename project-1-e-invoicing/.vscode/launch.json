@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Deploy Cloud Function",
+            "type": "cloudcode.cloudfunctions",
+            "request": "launch",
+            "functionName": "project-1-e-invoicing",
+            "gen": "GEN_2",
+            "revision": "project-1-e-invoicing-00005-jax",
+            "entryPoint": "main",
+            "testInput": "",
+            "region": "europe-west1",
+            "runtime": "python311"
+        }
+    ]
+}
