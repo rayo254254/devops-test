@@ -14,7 +14,7 @@
 # creteated by: Marc De Krock                                               *
 # date: 20250516                                                            *
 # ****************************************************************************
-# FROM OWN LIBS
+# FROM OWN LIBSs
 from data_processing_utils import (
     split_supplier_address_for_template,
     split_customer_address_for_template,
