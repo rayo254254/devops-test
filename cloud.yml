@@ -1,0 +1,10 @@
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+    [
+      'run', 'deploy', 'my-service',
+      '--image', 'gcr.io/$PROJECT_ID/my-image',
+      '--region', 'europe-west1',
+      '--platform', 'managed',
+      '--allow-unauthenticated'
+    ]

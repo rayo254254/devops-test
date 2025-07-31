@@ -1,5 +1,6 @@
 # secrets.py for storing sensitive information
 # This file is used to access secrets stored in Google Cloud Secret Manager.
+# It is not meant to be run directly, but rather imported by other modules.
 
 from google.cloud import secretmanager
 
