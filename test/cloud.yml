@@ -1,10 +1,13 @@
+# test/cloud.yml
+# This file is used to deploy a Google Cloud Function using Cloud Build.
+steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'gcloud'
-  args:
-    [
-      'run', 'deploy', 'my-service',
-      '--image', 'gcr.io/$PROJECT_ID/my-image',
-      '--region', 'europe-west1',
-      '--platform', 'managed',
-      '--allow-unauthenticated'
-    ]
+  args: [
+    'functions', 'deploy', 'YOUR_FUNCTION_NAME',
+    '--runtime', 'python311',
+    '--trigger-http',
+    '--region', 'europe-west1',
+    '--entry-point', 'hello_world',
+    '--allow-unauthenticated'
+  ]
