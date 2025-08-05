@@ -1,5 +1,5 @@
 # Cloud Build configuration file for deploying Google Cloud Functions
-# This script detects changes in the main branch and deploys functions accordingly.
+
 steps:
 - name: 'gcr.io/cloud-builders/git'
   entrypoint: bash
