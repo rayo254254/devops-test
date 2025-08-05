@@ -1,0 +1,39 @@
+steps:
+- name: 'gcr.io/cloud-builders/git'
+  entrypoint: bash
+  args:
+    - -c
+    - |
+      git fetch origin main
+      CHANGED=$(git diff --name-only origin/main HEAD)
+      echo "$CHANGED"
+
+      # Extract top-level folders only
+      FOLDERS=$(echo "$CHANGED" | cut -d/ -f1 | sort -u)
+      echo "Detected folders: $FOLDERS"
+
+      for folder in $FOLDERS; do
+        if [ -f "$folder/main.py" ]; then
+          echo "Processing function folder: $folder"
+
+          PROJECT_ID=$(jq -r .\"$folder\".project_id deploy-config.json)
+          FUNCTION_NAME=$(jq -r .\"$folder\".function_name deploy-config.json)
+
+          if [[ "$PROJECT_ID" != "null" && "$FUNCTION_NAME" != "null" ]]; then
+            echo "Deploying $FUNCTION_NAME to $PROJECT_ID"
+
+            gcloud config set project $PROJECT_ID
+            gcloud functions deploy $FUNCTION_NAME \
+              --gen2 \
+              --runtime=python311 \
+              --region=europe-west1 \
+              --source=$folder \
+              --entry-point=$FUNCTION_NAME \
+              --trigger-http \
+              --allow-unauthenticated
+          else
+            echo "❌ Config missing for $folder — skipping"
+          fi
+        fi
+      done
+      echo "All functions processed."
