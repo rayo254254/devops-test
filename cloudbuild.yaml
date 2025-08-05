@@ -7,7 +7,6 @@ steps:
     args:
       - -c
       - |
-          # Use a different variable name to avoid confusion with Cloud Build substitutions
           changed_files=$(git diff-tree --no-commit-id --name-only -r $COMMIT_SHA)
           echo "$changed_files"
 
@@ -39,14 +38,14 @@ steps:
             fi
           done
 
-          echo "✅ All functions processed."
-
-      - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-        entrypoint: bash
-        args:
-          - -c
-           - |
-            echo "Deployed functions:"
-            gcloud functions list --project=$PROJECT_ID
-             echo "Cloud Run services (Gen2 functions):"
-            gcloud run services list --region=europe-west1
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - -c
+      - |
+          echo "=== Deployment Verification ==="
+          echo "Cloud Functions:"
+          gcloud functions list --format="table(name,status,trigger,version)"
+          echo ""
+          echo "Cloud Run Services (Gen2 Functions):"
+          gcloud run services list --region=europe-west1 --format="table(metadata.name,status.url)"
