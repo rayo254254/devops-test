@@ -40,3 +40,13 @@ steps:
           done
 
           echo "✅ All functions processed."
+
+      - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+        entrypoint: bash
+        args:
+          - -c
+           - |
+            echo "Deployed functions:"
+            gcloud functions list --project=$PROJECT_ID
+             echo "Cloud Run services (Gen2 functions):"
+            gcloud run services list --region=europe-west1
