@@ -1,4 +1,3 @@
-# Cloud Build configuration file for deploying Google Cloud Functions
 options:
   logging: CLOUD_LOGGING_ONLY
 
@@ -8,11 +7,9 @@ steps:
   args:
     - -c
     - |
-      git fetch origin main
-      CHANGED=$(git diff --name-only origin/main HEAD)
+      CHANGED=$(git diff-tree --no-commit-id --name-only -r $COMMIT_SHA)
       echo "$CHANGED"
 
-      # Extract top-level folders only
       FOLDERS=$(echo "$CHANGED" | cut -d/ -f1 | sort -u)
       echo "Detected folders: $FOLDERS"
 
@@ -40,4 +37,5 @@ steps:
           fi
         fi
       done
-      echo "All functions processed."
+
+      echo "✅ All functions processed."
