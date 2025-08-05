@@ -7,36 +7,36 @@ steps:
     args:
       - -c
       - |
-          CHANGED=\$(git diff-tree --no-commit-id --name-only -r \$COMMIT_SHA)
-          echo "\$CHANGED"
+          # Use a different variable name to avoid confusion with Cloud Build substitutions
+          changed_files=$(git diff-tree --no-commit-id --name-only -r $COMMIT_SHA)
+          echo "$changed_files"
 
-          FOLDERS=\$(echo "\$CHANGED" | cut -d/ -f1 | sort -u)
-          echo "Detected folders: \$FOLDERS"
+          folders=$(echo "$changed_files" | cut -d/ -f1 | sort -u)
+          echo "Detected folders: $folders"
 
-          for folder in \$FOLDERS; do
-            if [ -f "\$folder/main.py" ]; then
-              echo "Processing function folder: \$folder"
+          for folder in $folders; do
+            if [ -f "$folder/main.py" ]; then
+              echo "Processing function folder: $folder"
 
-              PROJECT_ID=\$(jq -r .\"\$folder\".project_id deploy-config.json)
-              FUNCTION_NAME=\$(jq -r .\"\$folder\".function_name deploy-config.json)
+              project_id=$(jq -r .\"$folder\".project_id deploy-config.json)
+              function_name=$(jq -r .\"$folder\".function_name deploy-config.json)
 
-              if [[ "\$PROJECT_ID" != "null" && "\$FUNCTION_NAME" != "null" ]]; then
-                echo "Deploying \$FUNCTION_NAME to \$PROJECT_ID"
+              if [[ "$project_id" != "null" && "$function_name" != "null" ]]; then
+                echo "Deploying $function_name to $project_id"
 
-                gcloud config set project \$PROJECT_ID
-                gcloud functions deploy \$FUNCTION_NAME \
+                gcloud config set project $project_id
+                gcloud functions deploy $function_name \
                   --gen2 \
                   --runtime=python311 \
                   --region=europe-west1 \
-                  --source=\$folder \
-                  --entry-point=\$FUNCTION_NAME \
+                  --source=$folder \
+                  --entry-point=$function_name \
                   --trigger-http \
                   --allow-unauthenticated
               else
-                echo "❌ Config missing for \$folder — skipping"
+                echo "❌ Config missing for $folder — skipping"
               fi
             fi
           done
 
           echo "✅ All functions processed."
-
