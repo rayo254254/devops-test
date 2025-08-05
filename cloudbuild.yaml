@@ -1,4 +1,6 @@
 # Cloud Build configuration file for deploying Google Cloud Functions
+options:
+  logging: CLOUD_LOGGING_ONLY
 
 steps:
 - name: 'gcr.io/cloud-builders/git'
